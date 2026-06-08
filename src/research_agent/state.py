@@ -7,3 +7,5 @@ class ResearchState(TypedDict):
     subtasks: list[str]                     # written by planner
     findings: Annotated[list[str], add]     # ← reducer: ACCUMULATE
     report: str                             # written by synthesizer
+    iterations: int                         # bumped each critic pass
+    gaps: list[str]                         # critic's notes for the next round
