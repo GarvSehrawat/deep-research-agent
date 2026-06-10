@@ -13,4 +13,5 @@ def critic_node(state):
     )
     assert isinstance(assessment, Assessment)
     return {"gaps": assessment.missing, "iterations": state.get("iterations", 0) + 1,
+            "llm_calls": 1,                          # budget accounting
             "_sufficient": assessment.sufficient}   # transient flag for routing
