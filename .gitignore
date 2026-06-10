@@ -22,6 +22,8 @@ dist/
 
 # ── LangGraph persistence (SqliteSaver checkpoints, Phase 4) ──
 checkpoints.db
+checkpoints.db-wal
+checkpoints.db-shm
 *.sqlite
 *.sqlite3
 

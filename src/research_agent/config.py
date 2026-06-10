@@ -49,5 +49,20 @@ class Settings(BaseSettings):
     retry_initial_interval: float = 1.0   # seconds; doubles each attempt (1, 2, 4, 8)
     retry_backoff_factor: float = 2.0
 
+    # ── Persistence & human-in-the-loop ───────────────────
+    # Where the SQLite checkpointer writes durable state. A single local file;
+    # zero setup, zero cost. For production swap in PostgresSaver (see
+    # research_agent/persistence.py). Relative paths resolve from the cwd, so
+    # like .env it expects you to run from the project root.
+    checkpoint_db_path: str = "checkpoints.db"
+
+    # Human-in-the-loop approval gate. When True, the graph pauses right after
+    # the FIRST plan (before the costly fan-out) and waits for a human to
+    # approve / edit / reject the subtasks. Default OFF so the agent stays fully
+    # autonomous for evals, CI, and the API's default path — turn it on per-run
+    # for interactive/operator use. NOTE: HITL only works with a checkpointer;
+    # interrupt() needs durable state to pause and resume.
+    hitl_approval_enabled: bool = False
+
 
 settings = Settings()
