@@ -16,10 +16,15 @@ class ResearchState(TypedDict, total=False):
     iterations: int                           # bumped each critic pass
     gaps: list[str]                           # critic's notes for the next round
 
-    # ── Guardrails ──────────────────────────────────────────────────
+    # Guardrails
     rejected: bool                            # input guard verdict
     rejection_reason: str                     # message delivered when a query is refused
     llm_calls: Annotated[int, add]            # budget accounting (summed across fan-out)
     repairs: int                              # output-guard repair attempts so far
     repair_notes: str                         # output guard → synthesizer feedback on a repair
     guardrail_flags: list[str]                # citation/content issues surfaced on the report
+
+    # Human-in-the-loop
+    plan_feedback: str                        # human's notes when a plan is rejected → planner redrafts
+    _plan_rejected: bool                      # transient routing flag set by the approval gate
+    _aborted: bool                            # human aborted at the gate → route straight to END

@@ -9,6 +9,7 @@ dependencies = [
     "pydantic-settings",
     "python-dotenv",
     "langchain-tavily>=0.2.18",
+    "langgraph-checkpoint-sqlite>=3.1.0",
 ]
 
 [dependency-groups]
