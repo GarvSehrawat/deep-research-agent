@@ -36,5 +36,16 @@ def build_graph():
 
 if __name__ == "__main__":
     app = build_graph()
-    result = app.invoke(cast("ResearchState", {"query": "What are the trade-offs of RAG vs fine-tuning?"}))
+    result = app.invoke(
+        cast("ResearchState", {"query": "What are the trade-offs of RAG vs fine-tuning?"}),
+        config={
+            "run_name": "deep-research",
+            "metadata": {
+                "model_planner": settings.model_planner,
+                "model_researcher": settings.model_researcher,
+                "model_synthesizer": settings.model_synthesizer,
+                "model_critic": settings.model_critic,
+            },
+        },
+    )
     print(result["report"])

@@ -11,9 +11,16 @@ dependencies = [
     "langchain-tavily>=0.2.18",
 ]
 
+[dependency-groups]
+dev = ["pytest>=8"]
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["eval: end-to-end agent quality evals (slow, costs LLM calls)"]
