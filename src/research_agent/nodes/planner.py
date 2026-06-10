@@ -19,4 +19,4 @@ def planner_node(state):
 
     plan = model.invoke(prompt)
     assert isinstance(plan, Plan)
-    return {"subtasks": plan.subtasks}
+    return {"subtasks": plan.subtasks, "llm_calls": 1}   # budget accounting
