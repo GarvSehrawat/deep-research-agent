@@ -39,7 +39,7 @@ from typing import cast
 from fastapi import FastAPI, HTTPException, Request
 from langchain_core.runnables import RunnableConfig
 from langgraph.types import Command
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from research_agent.config import settings
 from research_agent.graph import build_graph
@@ -49,7 +49,11 @@ from research_agent.state import ResearchState
 
 # ── Request / response schemas ───────────────────────────────────────────────
 class ResearchRequest(BaseModel):
-    query: str
+    # Cap the input: the graph fans out to several LLM workers, so an unbounded
+    # query is a cost amplifier (and a cheap abuse vector). 2000 chars is generous
+    # for a research question; min_length rejects an empty query with a 422 before
+    # any work is queued.
+    query: str = Field(min_length=1, max_length=2000)
 
 
 class ResearchAccepted(BaseModel):

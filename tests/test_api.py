@@ -124,6 +124,17 @@ def test_research_lifecycle():
             assert done["llm_calls"] == 3
 
 
+def test_query_validation_rejects_empty_and_oversized():
+    """The request schema caps query size (cost/abuse guard) — both an empty query
+    and one over the limit are rejected with 422 before any run is queued."""
+    with sqlite_saver(":memory:") as saver:
+        with TestClient(create_api(graph=_build_stub(saver))) as client:
+            assert client.post("/research", json={"query": ""}).status_code == 422
+            assert client.post("/research", json={"query": "x" * 2001}).status_code == 422
+            # A query at the boundary is accepted.
+            assert client.post("/research", json={"query": "x" * 2000}).status_code == 202
+
+
 def test_unknown_thread_is_404():
     with sqlite_saver(":memory:") as saver:
         with TestClient(create_api(graph=_build_stub(saver))) as client:

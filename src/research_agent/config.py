@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     model_judge: str = "openai:gpt-4o-mini"   # cheap model for LLM-as-judge evals
 
     temperature: float = 0.0
-    max_research_iterations: int = 1
+    max_research_iterations: int = 2
 
     # Eval gates: the agent must stay at/above these mean scores in CI.
     eval_min_faithfulness: float = 0.7
