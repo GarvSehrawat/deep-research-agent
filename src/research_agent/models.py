@@ -7,6 +7,7 @@ _SPEC_BY_ROLE = {
     "researcher": settings.model_researcher,
     "synthesizer": settings.model_synthesizer,
     "critic": settings.model_critic,
+    "judge": settings.model_judge,
 }
 
 
