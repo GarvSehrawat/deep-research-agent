@@ -4,7 +4,7 @@
 # committed uv.lock for a reproducible build. `--frozen` makes the build fail
 # loudly if the lockfile is out of date with pyproject.toml.
 FROM python:3.12-slim
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.11.19 /uv /bin/uv
 
 WORKDIR /app
 

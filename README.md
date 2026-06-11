@@ -1,6 +1,5 @@
 # Deep Research Agent
 
-[![Evals CI](https://github.com/libattistella/deep-research-agent/actions/workflows/evals.yml/badge.svg)](https://github.com/libattistella/deep-research-agent/actions/workflows/evals.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml)
 [![Built with LangGraph](https://img.shields.io/badge/built%20with-LangGraph-1C3C3C.svg)](https://github.com/langchain-ai/langgraph)
@@ -56,6 +55,7 @@ flowchart TD
 - [Evaluation & CI](#evaluation--ci)
 - [Run with Docker](#run-with-docker)
 - [Testing](#testing)
+- [Security & deployment](#security--deployment)
 - [License](#license)
 
 ---
@@ -476,7 +476,7 @@ Everything is env-driven with sensible code-level defaults in
 | `MODEL_SYNTHESIZER` | `openai:gpt-4o` | Synthesizer model. |
 | `MODEL_CRITIC` | `openai:gpt-4o-mini` | Critic model. |
 | `MODEL_JUDGE` | `openai:gpt-4o-mini` | Eval judge model. |
-| `MAX_RESEARCH_ITERATIONS` | `1` | Reflection-loop cap. |
+| `MAX_RESEARCH_ITERATIONS` | `2` | Reflection-loop cap. |
 | `MAX_LLM_CALLS_PER_RUN` | `22` | Hard budget ceiling per query. |
 | `GUARDRAIL_INPUT_ENABLED` | `true` | Scope/safety classifier on input. |
 | `GUARDRAIL_OUTPUT_ENABLED` | `true` | Citation + content gate on output. |
@@ -571,6 +571,24 @@ uv run pytest -m eval
 The fast suite covers the API lifecycle (`202` → poll → report, error/`404` paths,
 HITL pause/resume) and persistence (a paused run resumed from a brand-new DB
 connection) using **stub nodes**, so it runs anywhere without credentials.
+
+---
+
+## Security & deployment
+
+**The HTTP API is intentionally unauthenticated** — it's built to run locally or
+on a private network for demos and development, *not* to be exposed directly to
+the public internet. There is deliberately no built-in auth, CORS policy, or rate
+limiting in the app itself; if you deploy the running service somewhere reachable,
+put it behind your own gateway / reverse proxy for auth, CORS, TLS, and rate
+limiting. The agent fans out to many LLM calls per run, so an open endpoint with
+live provider keys is a direct cost-and-abuse vector — there's a hard per-run call
+ceiling (`MAX_LLM_CALLS_PER_RUN`) and a request size cap, but those are backstops,
+not network-level controls.
+
+Secrets are supplied only via environment variables / a local `.env` (git-ignored
+and kept out of the Docker image), never committed. See [SECURITY.md](SECURITY.md)
+for the full threat model, data-handling notes, and how to report an issue.
 
 ---
 

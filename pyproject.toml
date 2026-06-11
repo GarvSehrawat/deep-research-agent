@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pytest>=8"]
+dev = ["pytest>=8", "ruff>=0.10"]
 
 [build-system]
 requires = ["setuptools>=68"]
@@ -27,3 +27,7 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = ["eval: end-to-end agent quality evals (slow, costs LLM calls)"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
